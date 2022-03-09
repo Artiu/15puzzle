@@ -84,10 +84,10 @@ public:
 					if (itemIndex == 3 && rowIndex == 3) {
 						return true;
 					}
-					return false;
 				}
 			}
 		}
+		return false;
 	}
 };
 
