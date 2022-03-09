@@ -18,6 +18,7 @@ class Game {
 						board[row][column] = board[puzzlePos.y][puzzlePos.x];
 						board[puzzlePos.y][puzzlePos.x] = 0;
 					}
+					return;
 				}
 			}
 		}
@@ -84,6 +85,7 @@ public:
 					if (itemIndex == 3 && rowIndex == 3) {
 						return true;
 					}
+					return false;
 				}
 			}
 		}
