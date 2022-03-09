@@ -11,19 +11,15 @@ struct Coords {
 class Game {
 	int board[4][4];
 	void movePuzzle(Coords puzzlePos) {
-		bool isChanged = false;
 		for (int row = 0; row < 4; row++) {
 			for (int column = 0; column < 4; column++) {
 				if (board[row][column] == 0) {
 					if (((row - 1 == puzzlePos.y || row + 1 == puzzlePos.y) && column == puzzlePos.x) || ((column - 1 == puzzlePos.x || column + 1 == puzzlePos.x) && row == puzzlePos.y)) {
 						board[row][column] = board[puzzlePos.y][puzzlePos.x];
-						isChanged = true;
+						board[puzzlePos.y][puzzlePos.x] = 0;
 					}
 				}
 			}
-		}
-		if (isChanged) {
-			board[puzzlePos.y][puzzlePos.x] = 0;
 		}
 	}
 public:
@@ -58,12 +54,12 @@ public:
 			for (int j = 0; j < 4; j++) {
 				if (board[i][j] != 0) {
 					shape.setFillColor(sf::Color::Green);
-					shape.setPosition(i * BLOCK_SIZE, j * BLOCK_SIZE);
+					shape.setPosition(j * BLOCK_SIZE, i * BLOCK_SIZE);
 					shape.setOutlineColor(sf::Color::Black);
 					shape.setOutlineThickness(1);
 					window.draw(shape);
 					text.setString(std::to_string(board[i][j]));
-					text.setPosition(sf::Vector2f(i * BLOCK_SIZE + BLOCK_SIZE / 2 - 12, j * BLOCK_SIZE + BLOCK_SIZE / 2 - 12));
+					text.setPosition(sf::Vector2f(j * BLOCK_SIZE + BLOCK_SIZE / 2 - 12, i * BLOCK_SIZE + BLOCK_SIZE / 2 - 12));
 					window.draw(text);
 				}
 			}
@@ -75,17 +71,16 @@ public:
 		const int columnIndex = mousePos.x / BLOCK_SIZE;
 		const int rowIndex = mousePos.y / BLOCK_SIZE;
 		if (columnIndex < 4 && columnIndex >= 0 && rowIndex < 4 && rowIndex >= 0) {
-			movePuzzle(Coords{ rowIndex, columnIndex });
+			movePuzzle(Coords{ columnIndex, rowIndex });
 			renderBoard(window);
 		}
 	}
 
 	bool checkIsPuzzleInCorrectOrder() {
-		bool isCorrect = false;
 		for (int rowIndex = 0; rowIndex < 4; rowIndex++) {
 			for (int itemIndex = 0; itemIndex < 4; itemIndex++) {
 				int item = board[rowIndex][itemIndex];
-				if (board[rowIndex][itemIndex] != (rowIndex + 1) * (itemIndex + 1)) {
+				if (item != (rowIndex * 4) + (itemIndex + 1)) {
 					if (itemIndex == 3 && rowIndex == 3) {
 						return true;
 					}
